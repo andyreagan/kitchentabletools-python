@@ -167,7 +167,7 @@ def listify(raw_text,lang="en"):
         raw_text = raw_text.replace(punctuation," ")
     # four groups here: numbers, links, emoticons, words
     # could be storing which of these things matched it...but don't need to
-    words = [x.lower() for x in re.findall(r"(?:[0-9][0-9,\.]*[0-9])|(?:http://[\w\./\-\?\&\#]+)|(?:[\w\@\#\'\&\]\[]+)|(?:[b}/3D;p)|’\-@x#^_0\\P(o:O{X$[=<>\]*B]+)",raw_text,flags=re.UNICODE)]
+    words = [x.lower() for x in re.findall(r"(?:[0-9][0-9,\.]*[0-9])|(?:http[s]*://[\w\./\-\?\&\#]+)|(?:[\w\@\#\'\&\]\[]+)|(?:[b}/3D;p)|’\-@x#^_0\\P(o:O{X$[=<>\]*B]+)",raw_text,flags=re.UNICODE)]
 
     return words
 
