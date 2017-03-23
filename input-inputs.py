@@ -22,6 +22,7 @@ free_input_re = re.compile(r"\s*\\input{([\.\w/-]+)")
 def readlines(filename,basefile):
     outputstring = ""
 
+    print("reading "+filename)
     f = open(filename,"r")
     for line in f:
         # don't need this package anymore
