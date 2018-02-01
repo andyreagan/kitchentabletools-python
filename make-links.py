@@ -9,7 +9,7 @@ See end of file for localized pieces."""
 # from sys import argv
 from subprocess import call
 import re
-from os.path import isfile, join, dirname, realpath
+from os.path import join
 from os import getcwd
 import argparse
 parser = argparse.ArgumentParser(description=usage)

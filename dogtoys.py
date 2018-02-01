@@ -1,18 +1,15 @@
-# import sys
-# sys.path.append("/Users/andyreagan/work/2015/08-kitchentabletools/")
-# from dog.toys import *
-
 from subprocess import call
-from datetime import datetime, timedelta
+from datetime import datetime
 from jinja2 import Template
-import codecs
 import re
+import codecs
+from matplotlib.pyplot import savefig
+import os
+
 
 # handle both pythons
 from sys import version
 if version < '3':
-    import codecs
-
     def u(x):
         """Python 2/3 agnostic unicode function"""
         return codecs.unicode_escape_decode(x)[0]
@@ -87,15 +84,13 @@ def crop_shift_top(pdffile):
 
 
 def mysavefig(name, date_prefix=True, folder="", openfig=True, pdfcrop=False):
-    from matplotlib.pyplot import savefig
-    from os import path
     '''Save a figure with timestamp.'''
     formatted_date = ""
     if date_prefix:
         now = datetime.now()
         formatted_date = now.strftime("%Y-%m-%d-%H-%M")
-    fname = "-".join([formatted_date, name])
-    pathed_fname = path.join(folder, name)
+    name = "-".join([formatted_date, name])
+    pathed_fname = os.path.join(folder, name)
     savefig(pathed_fname, bbox_inches='tight')
     # savefig("{0}-{1}".format(now.strftime("%Y-%m-%d-%H-%M"),name))
     if openfig:

@@ -10,7 +10,6 @@
 from sys import argv
 from subprocess import call
 import re
-from os.path import isfile
 citation_re = re.compile(r"\\cite{([\w]+)}")
 
 if __name__ == "__main__":
