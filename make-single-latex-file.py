@@ -1,5 +1,5 @@
 #!/usr/bin/python
-usage = """make-single-latex-file.py filebasename-[revtex4,PLOS,PNAS].tex
+usage = """make-single-latex-file.py filebasename-[revtex4,PLOS,PNAS,main].tex
 
 replaces \inputs{stuff} with stuff.tex,
 inputs bbl file, etc.
@@ -13,6 +13,7 @@ creates foo-combined.tex"""
 import sys
 import re
 input_re = re.compile(r"\s*\\input{([\./]*)(\\filenamebase|)([\./\w-]+)")
+include_re = re.compile(r"\s*\\include{([\./]*)(\\filenamebase|)([\./\w-]+)")
 from os.path import join
 
 def readlines(filename,basefile):
@@ -25,17 +26,33 @@ def readlines(filename,basefile):
             line = ""
         # clear comments
         elif "%%" in line:
-            line = ""
+            line = line.split("%%")[0]
         if input_re.match(line) is not None:
             # print(input_re.findall(line))
             this_match = input_re.findall(line)[0]
             input_file_tex = join(this_match[0],this_match[1].replace(r"\filenamebase",basefile)+this_match[2]+".tex")
             # print(input_file_tex)
-            # not sure what this was being culled for
+            # # save this for making a diff file...
             # g = open(basefile+".inputs.txt","a")
-            # g.write(input_file.lstrip(".").rstrip(".")+" ")
+            # # g.write(input_file_tex.lstrip(".").rstrip(".")+" ")
+            # g.write(input_file_tex.lstrip().rstrip()+" ")
             # g.close()
             outputstring += readlines(input_file_tex,basefile)
+        elif include_re.match(line) is not None:
+            # print(input_re.findall(line))
+            this_match = include_re.findall(line)[0]
+            input_file = join(this_match[0],this_match[1].replace(r"\filenamebase",basefile)+this_match[2])
+            input_file_tex = input_file+".tex"
+            # print(input_file_tex)
+            # # save this for making a diff file...
+            # g = open(basefile+".inputs.txt","a")
+            # # g.write(input_file_tex.lstrip(".").rstrip(".")+" ")
+            # g.write(input_file_tex.lstrip().rstrip()+" ")
+            # g.close()
+            outputstring += r"\include{"+input_file+"-combined}\n"
+            # now go get the included file...
+            with open(input_file+"-combined.tex","w") as g:
+                g.write(readlines(input_file_tex,""))
         else:
             # outputfobj.write(line)
             outputstring += (line)
@@ -57,7 +74,7 @@ if __name__ == "__main__":
 
     # f = open(outfile,"w")
     # readlines(infile,f)
-    for fmt in ["-revtex4","-PLOS","-PNAS","-EPJ","-dissertation"]:
+    for fmt in ["-revtex4","-PLOS","-PNAS","-EPJ","-main"]:
         basefile = basefile.replace(fmt,"")
     full_file = readlines(infile,basefile)
 
