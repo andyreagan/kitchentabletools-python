@@ -15,15 +15,15 @@ citation_re = re.compile(r"\\cite{([\w]+)}")
 
 if __name__ == "__main__":
     file = argv[1]
-   
+
     # clean out the package directory
     # call(r"\rm epj-package/*",shell=True)
 
     # find figures
 
-    outfile = "epj-package/"+file
-    f = open(file,"r")
-    g = open(outfile,"w")
+    outfile = "epj-package/" + file
+    f = open(file, "r")
+    g = open(outfile, "w")
 
     figcount = 1
     supplementary = False
@@ -38,22 +38,22 @@ if __name__ == "__main__":
         if r"\includegraphics" in line:
             # print(line)
             # extract the figure
-            match = re.search(r"([\w\\\.\]\[\=]+){([\w\.\-/]+)}()",line)
+            match = re.search(r"([\w\\\.\]\[\=]+){([\w\.\-/]+)}()", line)
             figure_fullpath = match.groups()[1]
             figure_filename = figure_fullpath.split("/")[-1]
             # print(figure_fullpath)
             # print(figure_filename)
             # make the new filename
             if supplementary:
-                figure_newfilename = "figS"+str(figcount)+"_"+figure_filename
+                figure_newfilename = "figS" + str(figcount) + "_" + figure_filename
             elif figcount > 0:
-                figure_newfilename = "fig"+str(figcount)+"_"+figure_filename
+                figure_newfilename = "fig" + str(figcount) + "_" + figure_filename
             else:
                 figure_newfilename = figure_filename
             # print(figure_newfilename)
-            
-            print("cp {} epj-package/{}".format(figure_fullpath,figure_newfilename))
-            call("cp {} epj-package/{}".format(figure_fullpath,figure_newfilename),shell=True)
+
+            print("cp {} epj-package/{}".format(figure_fullpath, figure_newfilename))
+            call("cp {} epj-package/{}".format(figure_fullpath, figure_newfilename), shell=True)
             if not supplementary:
                 # if ".png" in figure_newfilename:
                 #     figure_name = figure_newfilename.replace(".png","")
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                 #     figure_name = figure_newfilename.replace(".pdf","")
                 #     if not isfile("epj-package/"+figure_name+".tiff"):
                 #         call("./tiffify.pl epj-package/{}.{{pdf,tiff}}".format(figure_name),shell=True)
-                #     # keep the pdf     
+                #     # keep the pdf
                 #     # call(r"rm folder/prefixfigfile.pdf",shell=True)
                 #     figure_newfilename = figure_name+".tiff"
                 # if figcount > 0:
@@ -72,11 +72,11 @@ if __name__ == "__main__":
                 # else:
                 #     # this is PLoS's header figure...
                 #     line = line.replace(figure_fullpath,figure_filename)
-                line = "%% "+match.groups()[0]+"{"+figure_newfilename+"}\n"
+                line = "%% " + match.groups()[0] + "{" + figure_newfilename + "}\n"
             else:
                 # don't worry about converting the ones in the supplementary
-                line = match.groups()[0]+"{"+figure_newfilename+"}\n"
-                
+                line = match.groups()[0] + "{" + figure_newfilename + "}\n"
+
             # print(line)
             figcount += 1
 
@@ -95,13 +95,13 @@ if __name__ == "__main__":
         # if supplementary:
 
         if not supplementary:
-            line = line.replace("tbp!","h!")
-            
+            line = line.replace("tbp!", "h!")
+
         # line = line.replace("figure*","figure")
         # line = line.replace("table*","table")
         if not supplementary:
-            line = line.replace(r"\section{",r"\section*{")
-            line = line.replace(r"\subsection{",r"\subsection*{")
+            line = line.replace(r"\section{", r"\section*{")
+            line = line.replace(r"\subsection{", r"\subsection*{")
 
         g.write(line)
     f.close()

@@ -9,14 +9,14 @@ See end of file for localized pieces."""
 # from sys import argv
 from subprocess import call
 import re
-from os.path import isfile,join,dirname,realpath
+from os.path import isfile, join, dirname, realpath
 from os import getcwd
 import argparse
 parser = argparse.ArgumentParser(description=usage)
 parser.add_argument('texfile')
 parser.add_argument('output_folder')
-parser.add_argument('full_figure_path',type=bool,default=False)
-parser.add_argument('--fig_prefix',type=str,default='fig')
+parser.add_argument('full_figure_path', type=bool, default=False)
+parser.add_argument('--fig_prefix', type=str, default='fig')
 
 citation_re = re.compile(r"\\cite{([\w]+)}")
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         # this gets the location of this file...
         # cwd = dirname(realpath(__file__))
         cwd = getcwd()
-        figure_path = join(cwd,output_folder)
+        figure_path = join(cwd, output_folder)
     else:
         figure_path = ""
 
@@ -41,9 +41,9 @@ if __name__ == "__main__":
 
     # find figures
 
-    outfile = join(output_folder,texfile)
-    f = open(texfile,"r")
-    g = open(outfile,"w")
+    outfile = join(output_folder, texfile)
+    f = open(texfile, "r")
+    g = open(outfile, "w")
 
     figcount = 1
     supplementary = False
@@ -59,20 +59,20 @@ if __name__ == "__main__":
         if r"\includegraphics" in line:
             # print(line)
             # extract the figure
-            match = re.search(r"([\w\\\.\]\[\=]+){([\w\.\-/]+)}()",line)
+            match = re.search(r"([\w\\\.\]\[\=]+){([\w\.\-/]+)}()", line)
             figure_fullpath = match.groups()[1]
             figure_filename = figure_fullpath.split("/")[-1]
             # print(figure_fullpath)
             # print(figure_filename)
             # make the new filename
             if figcount > 0:
-                figure_newfilename = fig_prefix+str(figcount)+"_"+figure_filename
+                figure_newfilename = fig_prefix + str(figcount) + "_" + figure_filename
             else:
                 figure_newfilename = figure_filename
             # print(figure_newfilename)
 
-            print("cp {} {}".format(figure_fullpath,join(output_folder,figure_newfilename)))
-            call("cp {} {}".format(figure_fullpath,join(output_folder,figure_newfilename)),shell=True)
+            print("cp {} {}".format(figure_fullpath, join(output_folder, figure_newfilename)))
+            call("cp {} {}".format(figure_fullpath, join(output_folder, figure_newfilename)), shell=True)
             if not supplementary:
                 # if ".png" in figure_newfilename:
                 #     figure_name = figure_newfilename.replace(".png","")
@@ -93,15 +93,13 @@ if __name__ == "__main__":
                 #     line = line.replace(figure_fullpath,figure_filename)
                 # line = "%% "+match.groups()[0]+"{"+figure_newfilename+"}\n"
                 # pass
-                line = match.groups()[0]+"{"+join(figure_path,figure_newfilename)+"}\n"
+                line = match.groups()[0] + "{" + join(figure_path, figure_newfilename) + "}\n"
             else:
                 # don't worry about converting the ones in the supplementary
-                line = match.groups()[0]+"{"+join(figure_path,figure_newfilename)+"}\n"
+                line = match.groups()[0] + "{" + join(figure_path, figure_newfilename) + "}\n"
 
             # print(line)
             figcount += 1
-
-
 
         # if caption:
         #     caption = False

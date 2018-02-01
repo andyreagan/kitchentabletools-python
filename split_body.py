@@ -11,17 +11,17 @@ from sys import argv
 if __name__ == "__main__":
     my_file = argv[1]
     file_split = my_file.split(".")
-    figure_file = ".".join(file_split[:-1]+["figures"]+[file_split[-1]])
-    caption_file = ".".join(file_split[:-1]+["captions"]+[file_split[-1]])
-    table_file = ".".join(file_split[:-1]+["tables"]+[file_split[-1]])
-    nofigure_file = ".".join(file_split[:-1]+["nofigures"]+[file_split[-1]])
-    nofigure_table_file = ".".join(file_split[:-1]+["nofigurestables"]+[file_split[-1]])
+    figure_file = ".".join(file_split[:-1] + ["figures"] + [file_split[-1]])
+    caption_file = ".".join(file_split[:-1] + ["captions"] + [file_split[-1]])
+    table_file = ".".join(file_split[:-1] + ["tables"] + [file_split[-1]])
+    nofigure_file = ".".join(file_split[:-1] + ["nofigures"] + [file_split[-1]])
+    nofigure_table_file = ".".join(file_split[:-1] + ["nofigurestables"] + [file_split[-1]])
 
     # array to hold the text from each figure
     figures = []
     tables = []
 
-    f = open(my_file,"r")
+    f = open(my_file, "r")
     figcount = -1
     figure = False
     tablecount = -1
@@ -53,26 +53,26 @@ if __name__ == "__main__":
             figure = False
         elif r"\end{table" in line:
             table = False
-        
+
     f.close()
 
-    f = open(figure_file,"w")
-    f.write("\n".join([x.replace("tbp!","!htb") for x in figures]))
+    f = open(figure_file, "w")
+    f.write("\n".join([x.replace("tbp!", "!htb") for x in figures]))
     f.close()
 
-    f = open(caption_file,"w")
+    f = open(caption_file, "w")
     # sneak it by the comment removal by using a single comment
-    f.write("\n".join([x.replace("\\includegraphics","% \\includegraphics").replace("tbp!","!htb") for x in figures]))
+    f.write("\n".join([x.replace("\\includegraphics", "% \\includegraphics").replace("tbp!", "!htb") for x in figures]))
     f.close()
 
-    f = open(table_file,"w")
+    f = open(table_file, "w")
     f.write("\n".join(tables))
     f.close()
 
-    f = open(nofigure_file,"w")
+    f = open(nofigure_file, "w")
     f.write(nofigures)
     f.close()
 
-    f = open(nofigure_table_file,"w")
+    f = open(nofigure_table_file, "w")
     f.write(nofigures_tables)
     f.close()
